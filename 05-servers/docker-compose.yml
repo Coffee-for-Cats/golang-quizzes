@@ -1,0 +1,10 @@
+# postgresql://fluffycat:s3cret@172.19.0.2:5432/heavycake
+services:
+  postgres:
+    image: postgres:15.4
+    environment:
+      POSTGRES_USER: fluffycat
+      POSTGRES_PASSWORD: s3cret
+      POSTGRES_DB: heavycake
+    ports: 
+      - "5432:5432"
