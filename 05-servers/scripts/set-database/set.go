@@ -26,6 +26,12 @@ func main() {
 	VALUES (
 		'Unlimited coffee suply (you cant sell it).',
 		'Unlimited tea suply (you cant sell it).'
+	), (
+		'Put your head in a honeycomb.',
+		'Kick the edge of the table 100 times.'
+	), (
+		'Eat only chocolate for the rest of your life.',
+		'Eat only pizza for the rest of your life.'
 	);
 	`)
 	if err3 != nil {
