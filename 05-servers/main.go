@@ -7,8 +7,10 @@ import (
 )
 
 func main() {
-	http.HandleFunc("POST /response", routes.PostResponse)
-	http.HandleFunc("/", routes.GetQuetion)
+	http.HandleFunc("/register", routes.Register)
+
+	http.HandleFunc("/quiz/{quizID}/", routes.GetQuiz)
+	http.HandleFunc("/quiz/random/", routes.GetRandomQuiz)
 
 	fmt.Println("🎉 Sever up! (on :8080) 🎉")
 	http.ListenAndServe(":8080", nil)

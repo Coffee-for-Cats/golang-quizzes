@@ -7,21 +7,26 @@ import (
 	"net/http"
 )
 
-type response struct {
+type answer_request struct {
 	Option int `json:"option"`
 	Id     int `json:"id"`
 }
 
+type answer_response struct {
+	Option1_count int `json:"option1_count"`
+	Option2_count int `json:"option2_count"`
+}
+
 func PostResponse(w http.ResponseWriter, req *http.Request) {
 
-	var content response
-	// var json_bytes string
+	var content answer_request
 	err := json.NewDecoder(req.Body).Decode(&content)
 	if err != nil {
 		http.Error(w, "Bad Request, invalid json", 400)
 		return
 	}
 
+	// no SQL Inject since Option is always an int.
 	column := fmt.Sprintf("option%d_count", content.Option)
 	query := fmt.Sprintf(`
 		UPDATE questions
@@ -35,5 +40,29 @@ func PostResponse(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	fmt.Fprintln(w, "Ok!")
+	// send the counts so the frontend calculates the %'s.
+	row := db.Use().QueryRow(`
+		SELECT option1_count, option2_count
+		FROM questions
+		WHERE id = $1
+	`, content.Id)
+
+	var option1_count, option2_count int
+	err3 := row.Scan(&option1_count, &option2_count)
+	if err3 != nil {
+		panic(err3)
+	}
+
+	response_str, err4 := json.MarshalIndent(answer_response{
+		Option1_count: option1_count,
+		Option2_count: option2_count,
+	}, "", "	")
+
+	if err4 != nil {
+		http.Error(w, "Conection Failed", 500)
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	fmt.Fprintln(w, string(response_str))
 }

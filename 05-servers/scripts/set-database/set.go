@@ -6,37 +6,71 @@ import (
 )
 
 func main() {
-	_, err := db.Use().Query(`DROP TABLE IF EXISTS questions;`)
+	_, err := db.Use().Exec(`
+		DROP TABLE IF EXISTS questions CASCADE;
+		DROP TABLE IF EXISTS quizes CASCADE;
+		DROP TABLE IF EXISTS users CASCADE;
+	`)
 	if err != nil {
 		panic(err)
 	}
 
-	_, err2 := db.Use().Query(`CREATE TABLE questions(
+	// users table
+	_, err = db.Use().Exec(`CREATE TABLE users(
 		id SERIAL PRIMARY KEY,
-		option1 TEXT NOT NULL,
-		option2 TEXT NOT NULL,
-		option1_count INT DEFAULT 0,
-		option2_count INT DEFAULT 0
-	);`)
-	if err2 != nil {
-		panic(err2)
+		-- necessary fields:
+		name TEXT NOT NULL UNIQUE,
+		salt TEXT NOT NULL,
+		hash TEXT NOT NULL
+	)`)
+	if err != nil {
+		panic(err)
 	}
 
-	_, err3 := db.Use().Query(`INSERT INTO questions (option1, option2)
-	VALUES (
-		'Unlimited coffee suply (you cant sell it).',
-		'Unlimited tea suply (you cant sell it).'
-	), (
-		'Put your head in a honeycomb.',
-		'Kick the edge of the table 100 times.'
-	), (
-		'Eat only chocolate for the rest of your life.',
-		'Eat only pizza for the rest of your life.'
-	);
-	`)
-	if err3 != nil {
-		panic(err3)
+	// quizes table
+	_, err = db.Use().Exec(`CREATE TABLE quizes(
+		id SERIAL PRIMARY KEY,
+		-- necessary fields:
+		title TEXT NOT NULL,
+		owner_id INT NOT NULL REFERENCES users(id)
+	)`)
+
+	// questions table
+	_, err = db.Use().Exec(`CREATE TABLE questions(
+		id SERIAL PRIMARY KEY,
+		-- necessary fields:
+		question TEXT NOT NULL UNIQUE,
+		correct_option TEXT NOT NULL,
+		wrong_option TEXT NOT NULL,
+		quiz_id INT NOT NULL REFERENCES quizes(id),
+		--
+		guess_count INT DEFAULT 0,  -- how many times it got guessed
+		hit_count INT DEFAULT 0		  -- how many times it was right
+	)`)
+	if err != nil {
+		panic(err)
 	}
 
-	fmt.Println("Exiting after success.")
+	// # random content
+
+	err = db.RegisterUser("User 1", "cafe-babe")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.CreateQuiz(1, "Opinions matter")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.CreateQuestion(
+		"What's better?", // question
+		"Coffee", "Tea",  // correct | wrong
+		1, // creator id
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("🎉 Success 🎉")
 }

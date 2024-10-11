@@ -1,11 +1,8 @@
-# Would you rather
-This is a simple web app of a "Would you rather" game.
+# Quizes app
+This was intended to be a "Would you rather" web app, but I turned it into a "quiz" app.
+Each player can make it's own questions, 
 
-## database schemas
-- database questions
-  int autoincrement: id
-  strings: option1 option2
-  ints: option1_count option2_count
+Database schemas in ./script/set-database/set.go
 
 ## Ideas
 - Put your head in a honeycomb or never eat chocolate again?
