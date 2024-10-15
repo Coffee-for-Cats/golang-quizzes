@@ -10,7 +10,6 @@ func main() {
 	http.HandleFunc("/register", routes.Register)
 
 	http.HandleFunc("GET  /quiz/{quizID}/", routes.GetQuiz)
-
 	http.HandleFunc("POST /quiz", routes.PostQuiz)
 	http.HandleFunc("POST /answer/{quizID}/", routes.PostResponse)
 

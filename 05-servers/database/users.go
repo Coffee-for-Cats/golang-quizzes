@@ -3,7 +3,8 @@ package db
 import (
 	"crypto/rand"
 	"crypto/sha256"
-	"encoding/hex"
+	"encoding/base64"
+	"errors"
 )
 
 func hash_credentials(pass, salt string) string {
@@ -11,7 +12,7 @@ func hash_credentials(pass, salt string) string {
 	hash.Write([]byte(pass))
 	hash.Write([]byte(salt))
 
-	return hex.EncodeToString(hash.Sum(nil))
+	return base64.StdEncoding.EncodeToString(hash.Sum(nil))
 }
 
 func RegisterUser(name string, pass string) (err error) {
@@ -22,7 +23,7 @@ func RegisterUser(name string, pass string) (err error) {
 		return err1
 	}
 
-	salt := hex.EncodeToString(salt_bytes)
+	salt := base64.StdEncoding.EncodeToString(salt_bytes)
 
 	hash_str := hash_credentials(pass, salt)
 
@@ -59,4 +60,28 @@ func VerifyUser(name string, pass string) bool {
 	}
 
 	return true
+}
+
+func Answered(user string, correct bool) error {
+	increment := 0
+	if correct {
+		increment = 1
+	}
+
+	result, err := Use().Exec(`UPDATE users
+		SET hit_count = hit_count + $1,
+				guess_count = guess_count + 1
+		WHERE name = $2
+	`, increment, user)
+
+	if err != nil {
+		return err
+	}
+
+	found, err := result.RowsAffected()
+	if err != nil || found < 1 {
+		return errors.New("User not found.")
+	}
+
+	return nil
 }

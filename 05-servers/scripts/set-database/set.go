@@ -17,7 +17,9 @@ func main() {
 
 	// users table
 	_, err = db.Use().Exec(`CREATE TABLE users(
-		id SERIAL PRIMARY KEY,
+		id 				  SERIAL PRIMARY KEY,
+		guess_count INT DEFAULT 0,
+		hit_count   INT DEFAULT 0,
 		-- necessary fields:
 		name TEXT NOT NULL UNIQUE,
 		salt TEXT NOT NULL,
