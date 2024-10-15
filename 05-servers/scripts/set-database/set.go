@@ -58,7 +58,7 @@ func main() {
 		panic(err)
 	}
 
-	_, err = db.CreateQuiz(1, "Opinions matter")
+	_, err = db.CreateQuiz("User 1", "Opinions matter")
 	if err != nil {
 		panic(err)
 	}

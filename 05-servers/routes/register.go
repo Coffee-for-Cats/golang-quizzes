@@ -28,5 +28,5 @@ func Register(w http.ResponseWriter, req *http.Request) {
 
 	// TODO: save Authorization in a header.
 
-	fmt.Fprintln(w, "Ok.")
+	fmt.Fprintln(w, "Ok")
 }

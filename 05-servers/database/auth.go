@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
+	"fmt"
 )
 
 func RegisterUser(name string, pass string) (err error) {
@@ -20,7 +21,7 @@ func RegisterUser(name string, pass string) (err error) {
 	hash.Write([]byte(pass))
 	hash.Write([]byte(salt))
 
-	hash_str := string(hash.Sum(nil))
+	hash_str := fmt.Sprintf("%x", hash.Sum(nil))
 
 	_, err = Use().Exec(`INSERT INTO users
 		(name, salt, hash)
@@ -37,9 +38,11 @@ func RegisterUser(name string, pass string) (err error) {
 
 func VerifyUser(name string, pass string) bool {
 
+	fmt.Println(name)
+
 	row := Use().QueryRow(`SELECT salt, hash
 		FROM users
-		WHERE name == $1
+		WHERE name = $1
 	`, name)
 
 	var salt, hash string
@@ -52,7 +55,11 @@ func VerifyUser(name string, pass string) bool {
 	expected_hash.Write([]byte(pass))
 	expected_hash.Write([]byte(salt))
 
-	expected_hash_str := string(expected_hash.Sum(nil))
+	expected_hash_str := fmt.Sprintf("%x", expected_hash.Sum(nil))
+
+	fmt.Println("expected:", expected_hash_str)
+	fmt.Println("recieved:", hash)
+
 	if expected_hash_str != hash {
 		return false // incorrect password
 	}

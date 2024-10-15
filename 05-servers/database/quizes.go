@@ -57,3 +57,31 @@ func GetQuiz(quiz_id int) (quiz_resp, error) {
 		Questions: questions,
 	}, nil
 }
+
+func CreateQuiz(creator string, title string) (quiz_id int, err error) {
+	rows, err := Use().Query(`
+		INSERT INTO quizes
+		(title, owner_id)
+		VALUES (
+			$1,
+			(SELECT id FROM users WHERE name = $2)
+		) 
+		RETURNING id
+	`, title, creator,
+	)
+
+	if err != nil {
+		return 0, err
+	}
+
+	var id int
+	if !rows.Next() {
+		return 0, errors.New("Error while returning quiz's id")
+	}
+	err = rows.Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, err
+}
