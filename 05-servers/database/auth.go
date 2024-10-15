@@ -3,9 +3,16 @@ package db
 import (
 	"crypto/rand"
 	"crypto/sha256"
-	"encoding/base64"
-	"fmt"
+	"encoding/hex"
 )
+
+func hash_credentials(pass, salt string) string {
+	hash := sha256.New()
+	hash.Write([]byte(pass))
+	hash.Write([]byte(salt))
+
+	return hex.EncodeToString(hash.Sum(nil))
+}
 
 func RegisterUser(name string, pass string) (err error) {
 
@@ -15,13 +22,9 @@ func RegisterUser(name string, pass string) (err error) {
 		return err1
 	}
 
-	salt := base64.URLEncoding.EncodeToString(salt_bytes)
+	salt := hex.EncodeToString(salt_bytes)
 
-	hash := sha256.New()
-	hash.Write([]byte(pass))
-	hash.Write([]byte(salt))
-
-	hash_str := fmt.Sprintf("%x", hash.Sum(nil))
+	hash_str := hash_credentials(pass, salt)
 
 	_, err = Use().Exec(`INSERT INTO users
 		(name, salt, hash)
@@ -38,8 +41,6 @@ func RegisterUser(name string, pass string) (err error) {
 
 func VerifyUser(name string, pass string) bool {
 
-	fmt.Println(name)
-
 	row := Use().QueryRow(`SELECT salt, hash
 		FROM users
 		WHERE name = $1
@@ -51,16 +52,9 @@ func VerifyUser(name string, pass string) bool {
 		return false // user not found
 	}
 
-	expected_hash := sha256.New()
-	expected_hash.Write([]byte(pass))
-	expected_hash.Write([]byte(salt))
+	expected_hash := hash_credentials(pass, salt)
 
-	expected_hash_str := fmt.Sprintf("%x", expected_hash.Sum(nil))
-
-	fmt.Println("expected:", expected_hash_str)
-	fmt.Println("recieved:", hash)
-
-	if expected_hash_str != hash {
+	if expected_hash != hash {
 		return false // incorrect password
 	}
 
