@@ -27,6 +27,7 @@ func GetQuiz(quiz_id int) (quiz_resp, error) {
 		FROM questions
 		WHERE quiz_id = $1 
 	`, quiz_id)
+	defer questions_rows.Close()
 
 	if err != nil {
 		return quiz_resp{}, errors.New("Quiz not found.")
@@ -138,6 +139,7 @@ func CreateQuiz(creator string, title string) (quiz_id int, err error) {
 		RETURNING id
 	`, title, creator,
 	)
+	defer rows.Close()
 
 	if err != nil {
 		return 0, err

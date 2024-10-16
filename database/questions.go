@@ -19,6 +19,7 @@ func CreateQuestion(
 		RETURNING id
 	`, question, correct_option, wrong_option, quiz_id,
 	)
+	defer result.Close()
 
 	if err != nil {
 		return 0, err

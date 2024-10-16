@@ -6,8 +6,14 @@ This was intended to be a "Would you rather" web app, but I turned it into a "qu
 
 Database schemas in ./script/set-database/set.go
 
-## Ideas
-- Put your head in a honeycomb or never eat chocolate again?
+## Routes
+See main.go for more details.
+- GET /quiz/{id}
+- GET /quiz/random
+- POST /register  | body: *username*, *password*.
+- POST /quiz      | body: *title* | auth needed
+- POST /questions | body: *question*, *correct*, *wrong*, *quiz_id* | auth needed
+- POST /answer    | body: *question_id*, *answer_text* | auth optional
 
 ## Commands I am using:
 setup:
