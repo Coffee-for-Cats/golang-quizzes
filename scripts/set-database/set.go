@@ -8,7 +8,7 @@ import (
 func main() {
 	_, err := db.Use().Exec(`
 		DROP TABLE IF EXISTS questions CASCADE;
-		DROP TABLE IF EXISTS quizes CASCADE;
+		DROP TABLE IF EXISTS quizzes CASCADE;
 		DROP TABLE IF EXISTS users CASCADE;
 	`)
 	if err != nil {
@@ -29,8 +29,8 @@ func main() {
 		panic(err)
 	}
 
-	// quizes table
-	_, err = db.Use().Exec(`CREATE TABLE quizes(
+	// quizzes table
+	_, err = db.Use().Exec(`CREATE TABLE quizzes(
 		id SERIAL PRIMARY KEY,
 		-- necessary fields:
 		title TEXT NOT NULL,
@@ -44,7 +44,7 @@ func main() {
 		question TEXT NOT NULL UNIQUE,
 		correct_option TEXT NOT NULL,
 		wrong_option TEXT NOT NULL,
-		quiz_id INT NOT NULL REFERENCES quizes(id),
+		quiz_id INT NOT NULL REFERENCES quizzes(id),
 		--
 		guess_count INT DEFAULT 0,  -- how many times it got guessed
 		hit_count INT DEFAULT 0		  -- how many times it was right

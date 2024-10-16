@@ -35,7 +35,7 @@ func GetQuiz(quiz_id int) (quiz_resp, error) {
 
 	// get the quiz title
 	row := Use().QueryRow(`SELECT title
-		FROM quizes
+		FROM quizzes
 		WHERE id = $1
 	`, quiz_id)
 
@@ -81,9 +81,9 @@ func GetRandomQuiz() (quiz_resp, error) {
 				)
 			)
 			FROM questions
-			WHERE questions.quiz_id = quizes.id
+			WHERE questions.quiz_id = quizzes.id
 		) AS questions -- json as question
-		FROM quizes
+		FROM quizzes
 		ORDER BY random()
 		LIMIT 1;
 	`)
@@ -117,7 +117,7 @@ func GetQuizOwner(quiz_id int) (creator_name string, err error) {
 	row := Use().QueryRow(`SELECT name
 		FROM users
 		WHERE id = (
-			SELECT owner_id FROM quizes
+			SELECT owner_id FROM quizzes
 			WHERE id = $1
 		)
 	`, quiz_id)
@@ -130,7 +130,7 @@ func GetQuizOwner(quiz_id int) (creator_name string, err error) {
 
 func CreateQuiz(creator string, title string) (quiz_id int, err error) {
 	rows, err := Use().Query(`
-		INSERT INTO quizes
+		INSERT INTO quizzes
 		(title, owner_id)
 		VALUES (
 			$1,
