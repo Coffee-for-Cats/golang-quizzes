@@ -11,6 +11,8 @@ Database schemas in ./script/set-database/set.go
 - Put your head in a honeycomb or never eat chocolate again?
 
 ## Commands I am using:
-- psql -h 172.19.0.2 -p 5432 -d heavycake -U fluffycat -W 
+setup:
+- sudo docker compose up -d
 - go run .
-- sudo docker compose up
+manage db:
+- psql -h 172.19.0.2 -p 5432 -d heavycake -U fluffycat -W 

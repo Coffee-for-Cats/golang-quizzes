@@ -11,13 +11,6 @@ import (
 
 // GET /quiz/:id/
 func GetQuiz(w http.ResponseWriter, req *http.Request) {
-
-	// auth
-	// if !mw.Access(req) {
-	// 	http.Error(w, "Unauthorized", 401)
-	// 	return
-	// }
-
 	query := req.URL.Path
 	pathParts := strings.Split(query, "/")
 	id, err := strconv.Atoi(pathParts[2])
@@ -28,7 +21,7 @@ func GetQuiz(w http.ResponseWriter, req *http.Request) {
 
 	quiz, err := db.GetQuiz(id)
 	if err != nil {
-		http.Error(w, err.Error(), 404)
+		http.Error(w, "Quiz not found.", 404)
 		return
 	}
 
@@ -42,5 +35,15 @@ func GetQuiz(w http.ResponseWriter, req *http.Request) {
 }
 
 func GetRandomQuiz(w http.ResponseWriter, req *http.Request) {
+	quiz, err := db.GetRandomQuiz()
+	if err != nil {
+		panic(err)
+	}
 
+	json_b, err := json.Marshal(quiz)
+	if err != nil {
+		http.Error(w, "Something went wrong. Give feedback to the dev.", 500)
+	}
+
+	fmt.Fprintln(w, string(json_b))
 }

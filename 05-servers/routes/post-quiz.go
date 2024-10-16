@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type PostQuizRequest struct {
+type post_quiz_request struct {
 	Title string `json:"title"`
 }
 
@@ -22,7 +22,7 @@ func PostQuiz(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var title_struct PostQuizRequest
+	var title_struct post_quiz_request
 	err := json.NewDecoder(req.Body).Decode(&title_struct)
 	if err != nil {
 		panic(err)
