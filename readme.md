@@ -20,6 +20,7 @@ setup:
 - `sudo docker compose up -d`
 - Get the container ip and change it in the database string in /database/connect.go
 - `go run .`
+
 manage db:
 - psql "postgresql://fluffycat@172.19.0.2:5432/heavycake?sslmode=disable"
 - password is *s3cret* in my case.
