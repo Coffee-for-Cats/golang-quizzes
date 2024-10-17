@@ -1,4 +1,4 @@
-# Quizes app
+# Quizzes app
 This was intended to be a "Would you rather" web app, but I turned it into a "quiz" app.
 - Every player eeeds to register.
 - You can play without being registered, but your score will not be tracked.
@@ -11,13 +11,16 @@ See main.go for more details.
 - GET /quiz/{id}
 - GET /quiz/random
 - POST /register  | body: *username*, *password*.
-- POST /quiz      | body: *title* | auth needed
+- POST /quiz      | body: *title*                                   | auth needed
 - POST /questions | body: *question*, *correct*, *wrong*, *quiz_id* | auth needed
-- POST /answer    | body: *question_id*, *answer_text* | auth optional
+- POST /answer    | body: *question_id*, *answer_text*              | auth optional
 
-## Commands I am using:
+## Commands:
 setup:
-- sudo docker compose up -d
-- go run .
+- `sudo docker compose up -d`
+- Get the container ip and change it in the database string in /database/connect.go
+- `go run .`
 manage db:
-- psql -h 172.19.0.2 -p 5432 -d heavycake -U fluffycat -W 
+- psql "postgresql://fluffycat@172.19.0.2:5432/heavycake?sslmode=disable"
+- password is *s3cret* in my case.
+- remember to change the ip ;)
