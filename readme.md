@@ -1,7 +1,7 @@
 # Quizzes app
 This was intended to be a "Would you rather" web app, but I turned it into a "quiz" app.
-- Every player eeeds to register.
-- You can play without being registered, but your score will not be tracked.
+- Every player needs to register.
+- You can play without being registered, but *your* score will not be tracked.
 - Status 201 for correct answer, 202 for wrong.
 
 Database schemas in ./script/set-database/set.go
