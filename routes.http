@@ -1,0 +1,48 @@
+### GET a quiz
+GET http://localhost:8080/quiz/1
+
+### GET random quiz
+GET http://localhost:8080/quiz/random
+
+### Register
+POST http://localhost:8080/register
+content-type: application/json
+
+{
+  "username": "Lucas",
+  "password": "batata"
+}
+
+### Create Quiz
+# there is already a quiz with id 2 with this title
+POST http://localhost:8080/quiz
+Authorization: Basic THVjYXM6YmF0YXRh
+content-type: application/json
+
+{
+  "title": "Music Preference"
+}
+
+
+### Create question
+# there is already this question with id = 2
+POST http://localhost:8080/question
+Authorization: Basic THVjYXM6YmF0YXRh
+content-type: application/json
+
+{
+  "question": "Music Preference",
+  "correct": "Rock",
+  "wrong": "Classic",
+  "quiz_id": 2
+}
+
+### Create answer
+POST http://localhost:8080/answer/2
+Authorization: Basic THVjYXM6YmF0YXRh
+content-type: application/json
+
+{
+  "answer_text": "Rock",
+  "question_id": 2
+}

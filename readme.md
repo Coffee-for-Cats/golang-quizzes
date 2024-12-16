@@ -7,18 +7,13 @@ This was intended to be a "Would you rather" web app, but I turned it into a "qu
 Database schemas in ./script/set-database/set.go
 
 ## Routes
-See main.go for more details.
-- GET /quiz/{id}
-- GET /quiz/random
-- POST /register  | body: *username*, *password*.
-- POST /quiz      | body: *title*                                   | auth needed
-- POST /questions | body: *question*, *correct*, *wrong*, *quiz_id* | auth needed
-- POST /answer    | body: *question_id*, *answer_text*              | auth optional
+See routes.http for more details and tests.
+See main.go for the implementation.
 
 ## Commands:
 setup:
 - `sudo docker compose up -d`
-- Get the container ip and change it in the database string in /database/connect.go
+- `go ps -a` > `go inspect <id>` > Update IpAddres in database/connect.go.
 - `go run .`
 
 manage db:

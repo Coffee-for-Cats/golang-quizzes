@@ -16,7 +16,7 @@ func Use() *sql.DB {
 	if _db == nil {
 		// do the connection thing
 		var err error
-		_db, err = sql.Open("postgres", "postgresql://fluffycat:s3cret@172.19.0.2:5432/heavycake?sslmode=disable")
+		_db, err = sql.Open("postgres", "postgresql://fluffycat:s3cret@172.18.0.2:5432/heavycake?sslmode=disable")
 		if err != nil {
 			log.Fatal(err)
 		}
