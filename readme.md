@@ -13,8 +13,11 @@ See main.go for the implementation.
 ## Commands:
 setup:
 - Start postgres and update the connection string:
-`sudo docker compose up -d` To start postgres on 
-`docker ps -a` > `go inspect <id>` > Update IpAddres in database/connect.go.
+
+`sudo docker compose up -d`
+
+`docker ps -a` > `go inspect <id>`
+- Update IpAddres in database/connect.go.
 - Run the application:
 ```bash
 go mod tidy
