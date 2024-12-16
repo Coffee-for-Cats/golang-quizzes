@@ -12,9 +12,15 @@ See main.go for the implementation.
 
 ## Commands:
 setup:
-- `sudo docker compose up -d`
-- `go ps -a` > `go inspect <id>` > Update IpAddres in database/connect.go.
-- `go run .`
+- Start postgres and update the connection string:
+`sudo docker compose up -d` To start postgres on 
+`docker ps -a` > `go inspect <id>` > Update IpAddres in database/connect.go.
+- Run the application:
+```bash
+go mod tidy
+go run scripts/set-database/set.go
+go run .
+```
 
 manage db:
 - psql "postgresql://fluffycat@172.19.0.2:5432/heavycake?sslmode=disable"
