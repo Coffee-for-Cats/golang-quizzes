@@ -15,12 +15,11 @@ setup:
 - Start postgres and update the connection string:
 
 `sudo docker compose up -d`
-
+- If you need to manually set your database connection:
 `docker ps -a` > `go inspect <id>`
 - Update IpAddres in database/connect.go.
 - Run the application:
 ```bash
-go mod tidy
 go run scripts/set-database/set.go
 go run .
 ```
